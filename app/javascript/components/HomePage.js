@@ -124,7 +124,7 @@ class HomePage extends React.Component {
           </div>
           {this.state.apiResponse == "" ? (<div></div>) : (<div className="row mt-5 pl-5">
             <div className="col-sm">
-              <legend>Result : {this.state.apiResponse}</legend>
+              <legend>{this.state.apiResponse}</legend>
             </div>
           </div>)}
         </div>

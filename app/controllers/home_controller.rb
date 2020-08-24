@@ -6,8 +6,10 @@ class HomeController < ApplicationController
   end
 
   def run_script
-    system('python python_script.py')
-    file = File.open('response.txt')
+    input_text = params[:input_text]
+    system('rm output.txt') if File.exist?('output.txt')
+    system("python3 get_patient_movements.py '#{input_text}' >> output.txt")
+    file = File.open('output.txt')
     file_data = file.read
 
     render json: { response: file_data }, status: 200
