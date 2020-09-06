@@ -2,7 +2,12 @@ class HomeController < ApplicationController
   include Rails.application.routes.url_helpers
 
   def index
-    render component: 'HomePage', props: { script_url: script_url }
+    render component: 'HomePage', props: {
+      script_url: script_url,
+      sleep_tracking_graph_url: ActionController::Base.helpers.asset_path(
+        'sleep_tracking_graph.png'
+      )
+    }
   end
 
   def run_script

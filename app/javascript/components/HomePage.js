@@ -27,14 +27,15 @@ class HomePage extends React.Component {
     this.state = {
       inputText: "",
       apiResponse: "",
-      probabilityText: ""
+      showProbabilityInfo: false
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.showResponse = this.showResponse.bind(this);
     this.renderProbabilityButton = this.renderProbabilityButton.bind(this);
-    this.setProbabilityText = this.setProbabilityText.bind(this);
+    this.setShowProbabilityInfo = this.setShowProbabilityInfo.bind(this);
+    this.renderProbabilityInfo = this.renderProbabilityInfo.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.onFailure = this.onFailure.bind(this);
   };
@@ -102,15 +103,43 @@ class HomePage extends React.Component {
       <button
         type='submit'
         className='btn btn-success'
-        onClick={this.setProbabilityText}
+        onClick={this.setShowProbabilityInfo}
       >
-        Show Probability
+        More details
       </button>
     );
   }
 
-  setProbabilityText() {
-    this.setState({ probabilityText: "Probability of patient falling down from bed is 48%. Changes in medication might help in getting sound sleep. Please integrate with patients EMR for better suggestions." });
+  renderProbabilityInfo() {
+    return (
+      <div className="row">
+        <div className="col-4">
+          <img src={this.props.sleep_tracking_graph_url} style={{"width": "400px", "height": "250px"}} />
+        </div>
+        <div className="col-6">
+          <table class="table table-bordered">
+            <tbody>
+              <tr style={{"color": "white"}}>
+                <th scope="row">Quality of sleep</th>
+                <td>Average</td>
+              </tr>
+              <tr style={{"color": "white"}}>
+                <th scope="row">Fall Prediction</th>
+                <td>67%</td>
+              </tr>
+              <tr style={{"color": "white"}}>
+                <th scope="row">Number of alerts</th>
+                <td>3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
+  setShowProbabilityInfo() {
+    this.setState({ showProbabilityInfo: true });
   }
 
   showResponse() {
@@ -124,7 +153,7 @@ class HomePage extends React.Component {
           </div>
           <div className="row mt-5 pl-5">
             <div className="col-sm">
-              {this.state.probabilityText == "" ? (this.renderProbabilityButton()) : (<legend>{this.state.probabilityText}</legend>)}
+              {this.state.showProbabilityInfo ? (this.renderProbabilityInfo()) : (this.renderProbabilityButton())}
             </div>
           </div>
         </div>
@@ -139,6 +168,22 @@ class HomePage extends React.Component {
           <div className="mx-auto" style={{ "width": "585px" }}>
             <h1> PrivInt Eye for patient safety </h1>
             <hr style={{ "borderTop": "1px solid #f8f9fa" }}/>
+            <table class="table table-bordered">
+              <tbody>
+                <tr style={{"color": "white"}}>
+                  <th scope="row">Name</th>
+                  <td>John Sam</td>
+                </tr>
+                <tr style={{"color": "white"}}>
+                  <th scope="row">MRN</th>
+                  <td>1234567</td>
+                </tr>
+                <tr style={{"color": "white"}}>
+                  <th scope="row">Bed</th>
+                  <td>GM 34</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
           <div className="row mt-5 pl-5">
             <div className="col-sm">
