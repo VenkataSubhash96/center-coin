@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
 class Game < ApplicationRecord
-	has_one :room
+  belongs_to :room
+  serialize :users, Array
 end

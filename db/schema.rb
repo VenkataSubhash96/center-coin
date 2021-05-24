@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20_210_523_130_009) do
 
   create_table 'games', force: :cascade do |t|
     t.integer 'room_id'
-    t.integer 'users', default: [], array: true
+    t.text 'users'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
   end

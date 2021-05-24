@@ -69,8 +69,8 @@ class GameRequest extends React.Component {
     )
   }
 
-  onSuccess() {
-  	console.log('Success');
+  onSuccess(json) {
+  	window.location.href = this.props.game_lobby_url.replace("id", json.room_id);
   }
 
   onFailure() {
