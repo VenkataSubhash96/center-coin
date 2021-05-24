@@ -4,14 +4,14 @@ class RoomSerializer < ActiveModel::Serializer
   attributes :identifier, :users, :host_user
 
   def users
-    game_users.map { |user| user[:name] }
+    game.user_names
   end
 
   def host_user
-    game_users.find { |user| user[:host] == true }[:name]
+    game.users.find { |user| user[:host] == true }[:name]
   end
 
-  def game_users
-    @game_users ||= object.game.users
+  def game
+    @game ||= object.game
   end
 end

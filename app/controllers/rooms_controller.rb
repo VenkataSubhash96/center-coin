@@ -14,9 +14,22 @@ class RoomsController < ApplicationController
     render component: 'GameLobby', props: { room_details: room_details }
   end
 
+  def join
+    service = Services::JoinRoom.new(join_params['identifier'], join_params['user_name'])
+    if service.process
+      render json: { success: true, room_id: service.room.id }
+    else
+      render json: { success: false, errors: service.errors.full_messages }, status: 422
+    end
+  end
+
   private
 
   def create_params
     params.permit(:source_game, :user_name)
+  end
+
+  def join_params
+    params.permit(:user_name, :identifier)
   end
 end

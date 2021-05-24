@@ -15,7 +15,7 @@ class GameLobby extends React.Component {
   	return this.state.players.map((player, index) => {
   		return (
   			<div key={index}>
-  				<h5>{player} - {hostUser == player ? "host" : null}</h5>
+  				<h5>{player} {hostUser == player ? " - host" : null}</h5>
   			</div>
   		);
   	});

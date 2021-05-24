@@ -26,13 +26,20 @@ class GameRequest extends React.Component {
     super();
     this.state = {
     	createGameButtonClicked: false,
-    	userName: null
+      joinGameButtonClicked: false,
+    	userName: null,
+      roomId: null,
+      joinRoomErrorMessage: null
     };
 
     this.createRoom = this.createRoom.bind(this);
     this.handleCreateGameButtonClicked = this.handleCreateGameButtonClicked.bind(this);
+    this.handleJoinGameButtonClicked = this.handleJoinGameButtonClicked.bind(this);
     this.handleUserNameUpdate = this.handleUserNameUpdate.bind(this);
+    this.handleRoomIdUpdate = this.handleRoomIdUpdate.bind(this);
     this.joinRoom = this.joinRoom.bind(this);
+    this.renderCancelButton = this.renderCancelButton.bind(this);
+    this.resetLobby = this.resetLobby.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.onFailure = this.onFailure.bind(this);
   };
@@ -46,16 +53,25 @@ class GameRequest extends React.Component {
   }
 
   handleCreateGameButtonClicked() {
-  	this.setState({ createGameButtonClicked: true });
+  	this.setState({ createGameButtonClicked: true, userName: null });
+  }
+
+  handleJoinGameButtonClicked() {
+    this.setState({ joinGameButtonClicked: true, userName: null });
   }
 
   handleUserNameUpdate(event) {
   	this.setState({ userName: event.target.value });
   }
 
+  handleRoomIdUpdate(event) {
+    this.setState({ roomId: event.target.value });
+  }
+
   joinRoom() {
   	const params = {
-      source_game: this.props.game
+      user_name: this.state.userName,
+      identifier: this.state.roomId
     }
     this.makeRequest(this.props.join_room_url, params)	
   }
@@ -69,12 +85,34 @@ class GameRequest extends React.Component {
     )
   }
 
+  renderCancelButton() {
+    return (
+      <button 
+        type="button" 
+        className='btn btn-secondary'
+        onClick={this.resetLobby}
+      >
+        Cancel
+      </button>
+    );
+  }
+
+  resetLobby() {
+    this.setState({
+      createGameButtonClicked: false,
+      joinGameButtonClicked: false,
+      userName: null,
+      roomId: null,
+      joinRoomErrorMessage: null
+    });
+  }
+
   onSuccess(json) {
   	window.location.href = this.props.game_lobby_url.replace("id", json.room_id);
   }
 
-  onFailure() {
-  	console.log('Failed');
+  onFailure(json) {
+  	this.setState({ joinRoomErrorMessage: json.errors });
   }
 
   post_request(
@@ -137,13 +175,17 @@ class GameRequest extends React.Component {
 	                onChange={this.handleUserNameUpdate}
 	              />
 	              <br />
-	              <button 
-				        	type="button" 
-				        	className='btn btn-success'
-				        	onClick={this.createRoom}
-				        >
-				        	Create
-				        </button>
+                <div>
+                  <button 
+                    type="button" 
+                    className='btn btn-success'
+                    onClick={this.createRoom}
+                  >
+                    Create
+                  </button>
+                  &emsp;
+                  {this.renderCancelButton()}
+                </div>
 				        <br /><br /><br /><br />
             	</div>
             ) : (null)}
@@ -151,11 +193,47 @@ class GameRequest extends React.Component {
             <button
               type='submit'
               className='btn btn-success'
-              disabled={this.state.createGameButtonClicked}
-              href={this.props.join_room_url}
+              disabled={this.state.joinGameButtonClicked}
+              onClick={this.handleJoinGameButtonClicked}
             >
               Join a room
             </button>
+            {this.state.joinGameButtonClicked ? (
+              <div>
+                <br /><br />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter room ID"
+                  aria-label="roomId"
+                  aria-describedby="basic-addon1"
+                  onChange={this.handleRoomIdUpdate}
+                />
+                <br /><br />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="What is your nick name"
+                  aria-label="UserName"
+                  aria-describedby="basic-addon1"
+                  onChange={this.handleUserNameUpdate}
+                />
+                <br />
+                <div>
+                  <button
+                    type="button" 
+                    className='btn btn-success'
+                    onClick={this.joinRoom}
+                  >
+                    Join
+                  </button>
+                  &emsp;
+                  {this.renderCancelButton()}
+                </div>
+                <br /><br />
+                <strong>{this.state.joinRoomErrorMessage}</strong>
+              </div>
+            ) : (null)}
           </div>
         </div>
       </div>
