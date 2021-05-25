@@ -17,6 +17,7 @@ class RoomsController < ApplicationController
   def join
     service = Services::JoinRoom.new(join_params['identifier'], join_params['user_name'])
     if service.process
+      ActionCable.server.broadcast 'room', room_id: service.room.id
       render json: { success: true, room_id: service.room.id }
     else
       render json: { success: false, errors: service.errors.full_messages }, status: 422
