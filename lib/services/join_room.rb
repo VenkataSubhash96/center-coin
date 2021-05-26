@@ -2,6 +2,7 @@
 
 module Services
   class JoinRoom
+    include RoomHelper
     include ActiveModel::Validations
 
     validate :room_identifier_to_be_valid
@@ -18,6 +19,10 @@ module Services
       add_user_to_game
     end
 
+    def user
+      @user ||= User.create!(name: user_name)
+    end
+
     def room
       @room ||= Room.where(identifier: room_identifier, active: true).last
     end
@@ -27,7 +32,7 @@ module Services
     attr_reader :room_identifier, :user_name
 
     def add_user_to_game
-      game.users.push({ name: user_name })
+      game.users.push(user.id)
       game.save!
     end
 
