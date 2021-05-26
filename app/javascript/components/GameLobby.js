@@ -8,6 +8,8 @@ class GameLobby extends React.Component {
   	};
 
   	this.renderPlayers = this.renderPlayers.bind(this);
+    this.renderStartGameButton = this.renderStartGameButton.bind(this);
+    this.startGame = this.startGame.bind(this);
   };
 
   renderPlayers() {
@@ -19,6 +21,25 @@ class GameLobby extends React.Component {
   			</div>
   		);
   	});
+  }
+
+  renderStartGameButton() {
+    if (this.props.room_details.user_name == this.props.room_details.host_user) {
+      return (
+        <button
+          type="button"
+          className='btn btn-success'
+          onClick={this.startGame}
+          disabled={this.props.room_details.users.length < 2}
+        >
+          Start Game
+        </button>
+      );
+    }
+  }
+
+  startGame() {
+    console.log('came to start game');
   }
 
   render() {
@@ -33,6 +54,8 @@ class GameLobby extends React.Component {
           	<h4 style={{"textDecoration": "underline"}}>Players</h4>
           	<br />
           	{this.renderPlayers()}
+            <br /><br />
+            {this.renderStartGameButton()}
           </div>
         </div>
       </div>
